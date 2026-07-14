@@ -39,7 +39,7 @@ class LabSerializer(serializers.ModelSerializer):
 class ReservationSerializer(serializers.ModelSerializer):
     user = serializers.StringRelatedField()
     lab = serializers.StringRelatedField()
-    reservation_date = serializers.DateTimeField(format="%B %d, %Y", read_only=True)
+    reservation_date = serializers.DateTimeField(format="%B %d, %Y")
     reservation_time = serializers.SerializerMethodField()
     seat_number = serializers.IntegerField(read_only=True)
 

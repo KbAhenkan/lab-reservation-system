@@ -35,7 +35,7 @@ class Reservation(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     lab = models.ForeignKey(Lab, on_delete=models.CASCADE)
     seat_number = models.IntegerField()
-    reservation_date = models.DateTimeField(auto_now_add=True)
+    reservation_date = models.DateTimeField()
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
 
     def __str__(self):
