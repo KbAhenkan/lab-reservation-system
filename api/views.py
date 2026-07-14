@@ -89,7 +89,16 @@ def signup(request):
         email=data['email'], 
         password=data['password'],
         first_name=data['full_name'], 
-        role=data.get('role', 'Student')
+        role=data.get('role', 'Student'),
+
+Fix it by adding student_id:
+pythonuser = User.objects.create_user(
+    username=data['email'],
+    email=data['email'], 
+    password=data['password'],
+    first_name=data['full_name'], 
+    role=data.get('role', 'Student'),
+    student_id=data.get('student_id', None)
     )
    
     return Response({
