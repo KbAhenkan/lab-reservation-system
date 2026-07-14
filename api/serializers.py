@@ -20,6 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
         
     def create(self, validated_data):
         validated_data['password'] = make_password(validated_data.get('password'))
+        return super().create(validated_data)
 
 class LabSerializer(serializers.ModelSerializer):
     status = serializers.SerializerMethodField()
