@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 
 from pathlib import Path
 from dotenv import load_dotenv
+from datetime import timedelta
 import os
 
 load_dotenv()
@@ -155,4 +156,6 @@ EMAIL_USE_SSL = True
 EMAIL_HOST_USER = 'ahenkankwabena2@gmail.com'
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
-
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=24),
+}
