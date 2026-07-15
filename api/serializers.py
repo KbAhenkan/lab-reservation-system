@@ -9,7 +9,7 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username','first_name', 'last_name', 'student_id', 'email', 'role', 'is_active', 'status', 'password']
         extra_kwargs = {
-            'password': {'write_only':True}
+            'password': {'write_only': True, 'required': False}
         }
     
     def get_status(self, obj):
