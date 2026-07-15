@@ -37,15 +37,23 @@ class LabSerializer(serializers.ModelSerializer):
             return 'Open'
 
 class ReservationSerializer(serializers.ModelSerializer):
-    user = serializers.StringRelatedField()
-    lab = serializers.StringRelatedField()
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    lab = serializers.PrimaryKeyRelatedField(queryset=Lab.objects.all())
+    user_name = serializers.SerializerMethodField()
+    lab_name = serializers.SerializerMethodField()
     reservation_date = serializers.DateTimeField(format="%B %d, %Y")
     reservation_time = serializers.SerializerMethodField()
     seat_number = serializers.IntegerField(read_only=True)
 
     class Meta:
         model = Reservation
-        fields = ['id', 'user', 'lab', 'seat_number', 'reservation_date', 'reservation_time', 'status']
+        fields = ['id', 'user', 'lab', 'user_name', 'lab_name', 'seat_number', 'reservation_date', 'reservation_time', 'status']
 
     def get_reservation_time(self, obj):
         return obj.reservation_date.strftime("%I:%M %p")
+
+    def get_user_name(self, obj):
+        return obj.user.first_name
+
+    def get_lab_name(self, obj):
+        return f'Lab {obj.lab.room_number}'

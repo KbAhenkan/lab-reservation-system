@@ -237,7 +237,7 @@ def reservation_list(request):
                 return Response({'error': 'No available seats in in this lab'}, status=status.HTTP_400_BAD_REQUEST)
             
             user = request.data['user']
-            already_booked = Reservation.objects.filter(user=user, lab=lab).exists()
+            already_booked = Reservation.objects.filter(user=user, lab=lab).exclude(status='Cancelled').exists()
             if already_booked:
                 return Response({'error': 'User already has a reservation in this lab'}, status=status.HTTP_400_BAD_REQUEST)
             
@@ -251,7 +251,7 @@ def reservation_list(request):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
-@api_view(['PUT', 'DELETE'])
+@api_view(['PUT', 'PATCH', 'DELETE'])
 @permission_classes([IsAuthenticated])
 def reservation_detail(request, pk):
     try:
@@ -259,8 +259,9 @@ def reservation_detail(request, pk):
     except Reservation.DoesNotExist:
         return Response({'error': 'Reservation not found'}, status=status.HTTP_404_NOT_FOUND)
     
-    if request.method == 'PUT':
-        serializer = ReservationSerializer(reservation, data=request.data)
+    if request.method in ['PUT', 'PATCH']:
+        partial = request.method == 'PATCH'
+        serializer = ReservationSerializer(reservation, data=request.data, partial=partial)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data)
@@ -269,8 +270,6 @@ def reservation_detail(request, pk):
     if request.method == 'DELETE':
         lab = reservation.lab
         reservation.delete()
-
         lab.available_seats += 1
         lab.save()
-
         return Response({'message': 'Reservation cancelled successfully'}, status=status.HTTP_204_NO_CONTENT)
