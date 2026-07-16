@@ -146,6 +146,7 @@ REST_FRAMEWORK = {
 
 CORS_ALLOWED_ORIGINS = [
     'http://localhost:5173',  # Only visitors with this local hos are allowed
+    'https://lab-reservation-frontend.vercel.app',
 ]
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
